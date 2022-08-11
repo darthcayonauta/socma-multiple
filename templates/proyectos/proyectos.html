@@ -1,0 +1,60 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h3>
+      <i class="fas fa-angle-double-right"></i> Lista de Proyectos
+      <button type="button"
+             name="button"
+             id = "abrir-cerrar-buscar"
+             class="btn btn-sm btn-secondary"
+             >Abrir/Cerrar Buscar
+      </button>
+      <a type="button"
+         href="content-page.php?id=Y3JlYXItcHJveWVjdG8="
+         name="button"
+         id = "abrir-cerrar-buscar"
+         class="btn btn-sm btn-secondary"
+         >Crear Proyecto
+      </a>
+    </h3>
+    <hr>
+    <div class="row" id="espacio-buscar">
+      <div class="col-sm-12" >
+        ###buscar###
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div id="listado ">
+          ###listado###
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $('#espacio-buscar').hide();
+
+  $('#abrir-cerrar-buscar').on( 'click', ()=>{
+    $("#espacio-buscar").toggle(400);
+  });
+
+  $("#buscar").on("click", ()=>{
+    let fecha1 = $("#fecha1").val();
+    let fecha2 = $("#fecha2").val();
+
+    if( fecha1=='' || fecha2 ==''){
+      alert("Ambos campos son obligatorios");
+      return false;
+
+    }else{
+
+      let data = {'id'    :'search-project',
+                  'fecha1':fecha1,
+                  'fecha2':fecha2
+                };
+      ajx("#listado", data);
+
+    }
+  });
+</script>

@@ -1,0 +1,264 @@
+<h3>
+  <i class="fas fa-angle-double-right"></i> Formulario de Proyectos (<strong>###tipo-form###</strong>)
+  <a type="button"
+     href="content-page.php?id=aW5pY2lv"
+     name="button"
+     id = "abrir-cerrar-buscar"
+     class="btn btn-sm btn-secondary"
+     >Ir al listado
+  </a>
+</h3>
+<hr>
+<div class="izquierda">
+  <div class="alert alert-primary">
+    <strong>Nota</strong> : Existen campos obligatorios en este formulario
+  </div>
+  <br>
+
+  <div class="form-inicio-after">
+    <div class="row">
+      <div class="col-sm-2">
+        <strong>Año</strong>
+      </div>
+      <div class="col-sm-4">
+        ###year###
+      </div>
+      <div class="col-sm-2">
+        <strong>Mes</strong>
+      </div>
+      <div class="col-sm-4">
+        ###mes###
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-sm-2">
+        <strong>Fecha</strong>
+      </div>
+      <div class="col-sm-4">
+          ###fecha###
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-sm-2">
+        <strong>Num P.E.</strong>
+      </div>
+      <div class="col-sm-4">
+          ###num-pe###
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-sm-2">
+        <strong>Cliente</strong>
+      </div>
+      <div class="col-sm-4">
+        ###select-cliente###
+      </div>
+      <div class="col-sm-2">
+        <strong>Rut Cliente</strong>
+      </div>
+      <div class="col-sm-3">
+        <div id="espacio-rut-cliente">
+            <input type="text" class="form-control" placeholder="Rut Client"  >
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-sm-2">
+        <strong>Contacto</strong>
+      </div>
+      <div class="col-sm-3">
+        <div id="espacio-contacto">
+          <select class="form-control" name="" disabled>
+            <option value="">
+              Contacto
+            </option>
+          </select>
+          <input type="hidden" id="contacto" value="">
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-sm-2">
+        <strong>AM/PP/PI</strong>
+      </div>
+      <div class="col-sm-4">
+        ###select-ampppi###
+      </div>
+      <div class="col-sm-2">
+        <strong>NC/PP/PI</strong>
+      </div>
+      <div class="col-sm-4">
+        <input type="text" name="nc_pp_pi" id="nc_pp_pi" placeholder="NC_PP_PI" class="form-control">
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-sm-2">
+        <strong>Area/Localización</strong>
+      </div>
+      <div class="col-sm-3">
+        <div id="espacio-localizacion">
+            ###select-localizacion###
+          <input type="hidden" id="contacto" value="">
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-sm-2">
+        <strong>Servicio</strong>
+      </div>
+      <div class="col-sm-3">
+        <div id="espacio-servicio">
+            ###select-servicio###
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-sm-2">
+        <strong>Desc. Breve</strong>
+      </div>
+      <div class="col-sm-10">
+        <div id="espacio-breve">
+          <textarea name="name" rows="4" cols="80" id="descripcion-breve" class="form-control"></textarea>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-sm-2">
+        <strong>CLP/UF</strong>
+      </div>
+      <div class="col-sm-3">
+        <div id="espacio-clpuf">
+            ###select-clpuf###
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-sm-2">
+        <strong>Valor Neto</strong>
+      </div>
+      <div class="col-sm-3">
+        <div id="espacio-valor-neto">
+            <input type="text" name="valor-neto" id="valor-neto" placeholder="Ingrese Valor Neto" class="form-control">
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-sm-2">
+        <strong>Descuento</strong>
+      </div>
+      <div class="col-sm-3">
+        ###select-afirmacion###
+      </div>
+      <div class="col-sm-2">
+        <strong>% Descuento</strong>
+      </div>
+      <div class="col-sm-3">
+        <div id="espacio-descuento">
+            <input type="text" name="porcentaje-descuento" id="porcentaje-descuento" placeholder="% Descuento" class="form-control" disabled>
+            <input type="hidden" name="porcentaje-descuento" id="porcentaje-descuento" value="0">
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-sm-2">
+        <strong>Estado PE</strong>
+      </div>
+      <div class="col-sm-3">
+        <div id="espacio-estado-pe">
+            ###select-estado-pe###
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-sm-2">
+        <strong>Num OC</strong>
+      </div>
+      <div class="col-sm-3">
+            <input type="text" name="oc" id="oc" placeholder="Ingrese OC" class="form-control">
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-sm-2">
+        <strong>Num HES</strong>
+      </div>
+      <div class="col-sm-3">
+            <input type="text" name="hes" id="hes" placeholder="Ingrese HES" class="form-control">
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-sm-2">
+        <strong>Status Trabajo</strong>
+      </div>
+      <div class="col-sm-3">
+        <div id="espacio-status-trabajo">
+            ###select-status-trabajo###
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-sm-2">
+        <strong>Mes Factura</strong>
+      </div>
+      <div class="col-sm-3">
+        <div id="espacio-mes-factura">
+            ###select-mes-factura###
+        </div>
+      </div>
+      <div class="col-sm-2">
+        <strong>Num Factura</strong>
+      </div>
+      <div class="col-sm-3">
+        <input type="text" name="num-factura" id="num-factura" placeholder="Num Factura" class="form-control">
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-sm-2">
+        <strong>Valor Neto</strong>
+      </div>
+      <div class="col-sm-10">
+        <textarea name="observaciones" id="observaciones" rows="4" cols="200" id="descripcion-breve" class="form-control"></textarea>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-sm-12">
+        <button type="button" name="button" class="btn btn-secondary btn-block">
+          <i class="fas fa-angle-double-right"></i> Enviar Datos
+        </button>
+      </div>
+    </div>
+  </div>
+  </div>
+
+<script>
+  $("#id_cliente").on( "change", function(){
+    var  id_cliente = $(this).val();
+    //alert('is ok');
+    if( id_cliente == '' ){
+
+      alert("Debe seleccionar un cliente");
+      return false;
+
+    }else{
+      var data = {'id':'displayComboContacto', 'id_cliente': id_cliente};
+      ajx('#espacio-rut-cliente', data );
+    }
+  });
+</script>
