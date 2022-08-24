@@ -1,0 +1,45 @@
+<tr>
+    <td>###num###</td>
+    <td>###patente###</td>
+    <td>###marca###</td>
+    <td>###modelo###</td>
+    <td>###year###</td>
+    <td>###tipo_vehiculo###</td>
+    <td>###transmision###</td>
+    <td>
+        <button class="btn btn-sm btn-danger outline-line-rojo" id="delete-###id###">
+            Delete
+        </button>
+        &nbsp;
+        <button class="btn btn-sm btn-secondary outline-line-gris" id="update-###id###">
+            Edit
+        </button>
+    </td>
+</tr>
+<script>
+    $('#delete-###id###').on('click', ()=>{
+        
+        if( confirm('Está seguro de eliminar este vehiculo?') ){
+            
+            let id_vehiculo = '###id###';
+
+            let data        = {'id':'eliminaVehiculo',
+                               'id_vehiculo':id_vehiculo };
+            
+            ajx('#lista-vehiculos', data)
+
+       }else{
+        return false;
+       }
+    });
+
+    $('#update-###id###').on('click',()=>{
+        let id_vehiculo = '###id###';
+
+        let data        = {'id':'editaVehiculo',
+                           'id_vehiculo':id_vehiculo };
+
+        ajx('#lista-vehiculos', data); 
+    });
+
+</script>

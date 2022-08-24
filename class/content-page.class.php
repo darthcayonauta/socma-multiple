@@ -42,8 +42,7 @@ class ContentPage
 	private function control()
 	{
 		switch ($this->id)
-		{
-			
+		{			
 			case 'listarVehiculos':
 			case 'crearVehiculo':
 			case 'listarSolicitudes':

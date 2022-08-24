@@ -17,9 +17,10 @@ class response
 
 		switch ($this->id)
 		{
-			case 'displayComboContacto':
-			case 'search-project':
-				return $this::obtenerContenidoClaseOption('proyectos.class.php','Proyectos');
+			
+			case 'eliminaVehiculo':
+			case 'ingresaVehiculoData':
+				return $this::obtenerContenidoClaseOption('vehiculos.class.php','Vehiculos');
 				break;
 
 			default:

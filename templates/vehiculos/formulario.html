@@ -1,0 +1,113 @@
+<h3>
+    <i class="fas fa-angle-double-right"></i> Formulario de Automóviles (<strong>###tipo-form###</strong>)
+    <a type="button"
+       href="content-page.php?id=bGlzdGFyVmVoaWN1bG9z"
+       name="button"       
+       class="btn btn-sm btn-secondary"
+       >Ir al listado
+    </a>
+  </h3>
+  <hr>
+  <div class="izquierda">
+    <div class="alert alert-success col-sm-9">
+        <strong>Nota</strong> : Existen campos obligatorios en este formulario
+    </div>
+    <br>
+    <div class="row ">
+        <div class="col-sm-2">
+           <strong> Tipo Vehículo</strong>
+        </div>
+        <div class="col-sm-4">
+            ###select-tipo-vehiculo###
+        </div>
+    </div>
+    <br>
+    <div class="row ">
+        <div class="col-sm-2">
+        <strong>Marca</strong>
+        </div>
+        <div class="col-sm-4">
+            <input type="text" name="marca" 
+                   id="marca" 
+                   placeholder="Ingrese Marca" class="form-control" value="###marca###">
+        </div>
+    </div>
+    <br>
+    <div class="row ">
+        <div class="col-sm-2">
+        <strong>Modelo</strong>
+        </div>
+        <div class="col-sm-4">
+            <input type="text" name="modelo" 
+                   id="modelo" 
+                   placeholder="Ingrese Modelo" class="form-control" value="###modelo###">
+        </div>
+    </div>
+    <br>
+    <div class="row ">
+        <div class="col-sm-2">
+            <strong>Año</strong>
+        </div>
+        <div class="col-sm-2">
+            <input type="number" name="year" 
+                   id="year" 
+                   placeholder="Ingrese Año" class="form-control" value="###year###">
+        </div>
+        <div class="col-sm-2">
+            <strong>Patente / Placa</strong>
+        </div>
+        <div class="col-sm-3">
+            <input type="text" name="patente" 
+                   id="patente" 
+                   placeholder="Ingrese Patente" class="form-control" value="###patente###">
+        </div>
+    </div>
+    <br>
+    <div class="row ">
+        <div class="col-sm-2">
+           <strong> Transmisión</strong>
+        </div>
+        <div class="col-sm-4">
+            ###select-transmision###
+        </div>
+    </div>
+    <br>
+    <div class="row ">
+        <div class="col-sm-9">
+            ###hidden###
+            <button class="btn btn-secondary btn-block" id="###button-id###">
+                <i class="fas fa-angle-double-right"></i>  Send
+            </button>
+        </div>
+    </div>
+  </div>
+  
+  <script>
+    $('#send').on('click', ()=>{
+
+        let tipo_vehiculo       = $('#tipo_vehiculo').val();
+        let tipo_transmision    = $('#tipo_transmision').val();
+        let marca               = $('#marca').val();
+        let modelo              = $('#modelo').val();
+        let year                = $('#year').val();
+        let patente             = $('#patente').val();    
+
+        if(tipo_vehiculo == '' || tipo_transmision=='' || marca=='' || modelo==''  || year=='' || patente==''){
+            alert('Todos los campos son obligatorios');
+            return false;
+        }else{
+
+            let data = {
+                        'tipo_vehiculo'    : tipo_vehiculo,
+                        'tipo_transmision' : tipo_transmision,
+                        'marca'            : marca,
+                        'modelo'           : modelo,
+                        'year'             : year,
+                        'patente'          : patente,
+                        'id'               : 'ingresaVehiculoData'
+                        }
+
+            ajx('#multiverso', data);            
+        }
+    });
+  </script>

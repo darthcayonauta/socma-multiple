@@ -55,6 +55,16 @@ class Vehiculos{
                 return $this::crearVehiculo();
                 break;
 
+            case 'ingresaVehiculoData':
+                # code...
+                return $this::ingresaVehiculoData();
+                break;    
+
+            case 'eliminaVehiculo':
+                # code...
+                return $this::eliminaVehiculo();
+                break;    
+
             default:
                 # code...
                 return $this->error;
@@ -62,12 +72,45 @@ class Vehiculos{
         }
     }
 
+    private function eliminaVehiculo()
+    {
+        
+        if( $this->consultas->elimina( 'vehiculo', $_POST['id_vehiculo'] ) )
+             $msg = "Registro Eliminado";
+        else $msg = "Error AL ELIMINAR";   
+        
+        return $this::notificaciones('danger',null,$msg).$this::tablaVehiculos();
+    }
+
+    private function ingresaVehiculoData()
+    {
+      //  print_r( $_POST );
+
+        if( $this->consultas->procesaVehiculo( htmlentities( strtoupper( $_POST['marca'] )), 
+                                               htmlentities( strtoupper( $_POST['modelo'] )), 
+                                               htmlentities( $_POST['year'] ), 
+                                               htmlentities( strtoupper( $_POST['patente'] )),                                                
+                                               htmlentities( $_POST['tipo_vehiculo'] ),
+                                               htmlentities( $_POST['tipo_transmision'] )  )  )
+        { 
+            return "VEHICULO INGRESADO";
+         }else{
+            return "Error al ingresar vehiculo";
+         }
+
+    }
+
+
     /** 
      * listarSolicitud(): listado de solicitudes de vehiculos
      * @return string
      */
     private function listarSolicitud(){
-        return "<strong>{$this->id}</strong> esta en construccion! aca va un listado";
+        //$data = [];
+        //return $this::despliegueTemplate( $data, 'vehiculos/lista-vehiculos.html' );
+
+        return "<strong>{$this->id}</strong> esta en construccion!, aun no";
+
        } 
 
    /**
@@ -80,15 +123,88 @@ class Vehiculos{
 
 
    private function listarVehiculos(){
-    return "<strong>{$this->id}</strong> esta en construccion! aca va un listado";
+
+        $arr = $this::tablaVehiculos();
+
+
+        $data = ['###listado###' => $this::tablaVehiculos() ];
+        return $this::despliegueTemplate( $data, 'vehiculos/lista-vehiculos.html' );
+
    }
+
+
+   private function tablaVehiculos(){
+
+    $arr = $this::trVehiculos();
+
+    if( $arr['total-recs'] > 0 )
+    {
+        $data = [ '###tr###' => $arr['code'], '###total-recs###' => $arr['total-recs'] ];
+        return $this::despliegueTemplate( $data, 'vehiculos/tabla-vehiculos.html' );
+    }else{
+
+        return "<h2><strong>No existen</strong> vehiculos registrados en el sistema</h2>";
+    }    
+   }
+
+   private function trVehiculos(){
+
+    $code = "";
+    $i=0;
+
+    $arr = $this->consultas->vehiculo();
+
+    foreach ($arr['process'] as $key => $value) {
+        # code...
+        $data = ['###num###'            => $i+1,
+                 '###patente###'        => $value['patente'],
+                 '###marca###'          => $value['marca'],   
+                 '###modelo###'         => $value['modelo'],
+                 '###year###'           => $value['year'],
+                 '###tipo_vehiculo###'  => $value['nombreTipoVehiculo'],
+                 '###transmision###'    => $value['nombreTransmision'] ,
+                 '###id###'             => $value['id'] ];
+
+        $code .= $this::despliegueTemplate( $data, 'vehiculos/tr-vehiculos.html' );
+        $i++;
+    }
+
+    $out['code'] = $code;
+    $out['total-recs'] = $arr['total-recs']; 
+
+    return $out;
+
+   }
+
 
       /**
     * crearVehiculo(): generacion de formulario de solicitud de vehículos
     *@return string
     */    
     private function crearVehiculo(){
-        return "<strong>{$this->id}</strong> esta en construccion!, aca va un formulario";
+
+        //select tipo-vehiculo
+        $arr_vehiculo = $this->consultas->tipoVehiculo();
+        $sel_vehiculo = new Select($arr_vehiculo['process'],'id','descripcion',
+                                 'tipo_vehiculo','Seleccione Tipo Vehículo',null,'x');
+
+        //select tipo-transmision
+        $arr_trans = $this->consultas->tipoTransmision();
+        $sel_trans = new Select($arr_trans['process'],'id','descripcion',
+                                 'tipo_transmision','Seleccione Tipo Transmision',null,'x');
+
+
+        $data = ['###select-tipo-vehiculo###' => $sel_vehiculo->getCode(), 
+                 '###select-transmision###'   => $sel_trans->getCode(),
+                 '###tipo-form###'            => 'Creación',
+                 '###marca###'                => null,
+                 '###modelo###'               => null,
+                 '###patente###'              => null,
+                 '###year###'                 => null,
+                 '###button-id###'            => 'send',
+                 '###hidden###'               => null  
+                ];
+        return $this::despliegueTemplate( $data, "vehiculos/formulario.html" );
    }
 
  /**
