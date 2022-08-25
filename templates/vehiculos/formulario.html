@@ -80,6 +80,8 @@
             </button>
         </div>
     </div>
+    <br>
+    <div id="result"></div>
   </div>
   
   <script>
@@ -110,4 +112,35 @@
             ajx('#multiverso', data);            
         }
     });
+
+    $('#update').on('click', ()=>{
+
+        let id_vehiculo         = $('#id_vehiculo').val();
+        let tipo_vehiculo       = $('#tipo_vehiculo').val();
+        let tipo_transmision    = $('#tipo_transmision').val();
+        let marca               = $('#marca').val();
+        let modelo              = $('#modelo').val();
+        let year                = $('#year').val();
+        let patente             = $('#patente').val();    
+
+        if(tipo_vehiculo == '' || tipo_transmision=='' || marca=='' || modelo==''  || year=='' || patente==''){
+            alert('Todos los campos son obligatorios');
+            return false;
+        }else{
+
+            let data = {
+                        'id_vehiculo'      : id_vehiculo,
+                        'tipo_vehiculo'    : tipo_vehiculo,
+                        'tipo_transmision' : tipo_transmision,
+                        'marca'            : marca,
+                        'modelo'           : modelo,
+                        'year'             : year,
+                        'patente'          : patente,
+                        'id'               : 'editaVehiculoData'
+                        }
+
+            ajx('#result', data);            
+        }
+        });
+
   </script>

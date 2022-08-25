@@ -1,6 +1,5 @@
 <?php 
 
-
 class Vehiculos{
 
     private $consultas;
@@ -12,22 +11,22 @@ class Vehiculos{
 
     function __construct( $id = null ){
         
-        $this->id           = $id;
-        $this->yo           = $_SESSION['yo'];
-        $oConf              = new config();
-        $cfg                = $oConf->getConfig();
-        $db                 = new mysqldb(  $cfg['base']['dbhost'],
-                                            $cfg['base']['dbuser'],
-                                            $cfg['base']['dbpass'],
-                                            $cfg['base']['dbdata'] );
-    
-        $this->consultas    = 	new querys( $db );
-        $this->template  	= 	new template();
-        $this->ruta      	= 	$cfg['base']['template'];        
-        $this->error 		= 	" <strong>{$this->id}</strong> no definido";
-        $this->fecha_hoy 	=  date("Y-m-d");
-        $this->year 	    =  date("Y");
-        $this->mes 			=  date("m");
+        $this->id               = $id;
+        $this->yo               = $_SESSION['yo'];
+        $oConf                  = new config();
+        $cfg                    = $oConf->getConfig();
+        $db                     = new mysqldb(  $cfg['base']['dbhost'],
+                                                $cfg['base']['dbuser'],
+                                                $cfg['base']['dbpass'],
+                                                $cfg['base']['dbdata'] );
+        
+        $this->consultas        = 	new querys( $db );
+        $this->template  	    = 	new template();
+        $this->ruta      	    = 	$cfg['base']['template'];        
+        $this->error 		    = 	"<strong>{$this->id}</strong> no definido";
+        $this->fecha_hoy 	    =  date("Y-m-d");
+        $this->year 	        =  date("Y");
+        $this->mes 			    =  date("m");
     
         $this->fecha_hora_hoy	=  date("Y-m-d H:i:s");
     }
@@ -65,12 +64,82 @@ class Vehiculos{
                 return $this::eliminaVehiculo();
                 break;    
 
+            case 'editaVehiculo':
+                # code...
+                return $this::editaVehiculo();
+                break;    
+
+            case 'editaVehiculoData':
+                return $this::editaVehiculoData();
+                # code...
+                break;    
+
+
             default:
                 # code...
                 return $this->error;
                 break;
         }
     }
+
+    private function editaVehiculoData(){
+
+
+        if( $this->consultas->procesaVehiculo(  htmlentities( $_POST['marca'] ),
+                                                htmlentities( $_POST['modelo'] ),
+                                                htmlentities( $_POST['year'] ),
+                                                htmlentities( $_POST['patente'] ),
+                                                htmlentities( $_POST['tipo_vehiculo'] ),
+                                                htmlentities( $_POST['tipo_transmision'] ),
+                                                htmlentities( $_POST['id_vehiculo'] ) ) ){
+
+            return "<hr/><h3><strong>Todo Ok:</strong> Registro Actualizado</h3>";
+        
+        }else{
+
+            return "<hr/><h3><strong>Error:</strong> No se ha podido actualizar información</h3>";
+        }
+    }
+
+    private function editaVehiculo(){
+       // print_r( $_POST );
+
+        $code = "";
+        $i=0;
+    
+        $arr = $this->consultas->vehiculo( $_POST['id_vehiculo'] );
+    
+        foreach ($arr['process'] as $key => $value) {
+            
+            $arr_vehiculo = $this->consultas->tipoVehiculo();
+            $sel_vehiculo = new Select($arr_vehiculo['process'],'id','descripcion',
+                                     'tipo_vehiculo','Seleccione Tipo Vehículo',$value['tipo_vehiculo'],'x');
+    
+            $arr_trans = $this->consultas->tipoTransmision();
+            $sel_trans = new Select($arr_trans['process'],'id','descripcion',
+                                     'tipo_transmision','Seleccione Tipo Transmision',$value['transmision'],'x');
+    
+            $hidden = "<input type='hidden' id='id_vehiculo' value='".$value['id']."'>";                         
+    
+            $data = ['###select-tipo-vehiculo###' => $sel_vehiculo->getCode(), 
+                     '###select-transmision###'   => $sel_trans->getCode(),
+                     '###tipo-form###'            => 'Edición',
+                     '###marca###'                => $value['marca'],
+                     '###modelo###'               => $value['modelo'],
+                     '###patente###'              => $value['patente'],
+                     '###year###'                 => $value['year'],
+                     '###button-id###'            => 'update',
+                     '###hidden###'               => $hidden  
+                    ];
+            
+            $code .= $this::despliegueTemplate( $data, "vehiculos/formulario.html" );
+            
+        }
+
+       return $code; 
+    }
+
+
 
     private function eliminaVehiculo()
     {
@@ -93,7 +162,7 @@ class Vehiculos{
                                                htmlentities( $_POST['tipo_vehiculo'] ),
                                                htmlentities( $_POST['tipo_transmision'] )  )  )
         { 
-            return "VEHICULO INGRESADO";
+            return "<p>VEHICULO INGRESADO</p>".$this::listarVehiculos();
          }else{
             return "Error al ingresar vehiculo";
          }
@@ -106,9 +175,7 @@ class Vehiculos{
      * @return string
      */
     private function listarSolicitud(){
-        //$data = [];
-        //return $this::despliegueTemplate( $data, 'vehiculos/lista-vehiculos.html' );
-
+      
         return "<strong>{$this->id}</strong> esta en construccion!, aun no";
 
        } 
@@ -176,8 +243,7 @@ class Vehiculos{
 
    }
 
-
-      /**
+    /**
     * crearVehiculo(): generacion de formulario de solicitud de vehículos
     *@return string
     */    

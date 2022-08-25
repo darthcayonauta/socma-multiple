@@ -17,26 +17,26 @@ class select
 	private $id_select;
 	private $muestra_num;
 
-	function __construct( $arrayData,
-						  					$idMainField 		 		= null,
-						  					$descriptionField,
-						  					$selectId			 			= null,
-						  					$selectDescription 	= null,
-						  					$id_select 		 			= null,
-						  					$muestra_num 		 		= null )
+	function __construct(	$arrayData,
+							$idMainField 		= null,
+							$descriptionField,
+							$selectId			= null,
+							$selectDescription 	= null,
+							$id_select 		 	= null,
+							$muestra_num 		= null )
 	{
 		$oConf    = new config();
 		$cfg      = $oConf->getConfig();
 
-		$this->arrayData 					= $arrayData;
-		$this->idMainField 				= $idMainField;
+		$this->arrayData 			= $arrayData;
+		$this->idMainField 			= $idMainField;
 		$this->descriptionField 	= $descriptionField;
-		$this->selectId 					= $selectId;
+		$this->selectId 			= $selectId;
 		$this->selectDescription 	= $selectDescription;
-		$this->id_select 					= $id_select;
-		$this->muestra_num 				= $muestra_num;
-		$this->ruta 							= $cfg['base']['template'];
-		$this->template 					= new template();
+		$this->id_select 			= $id_select;
+		$this->muestra_num 			= $muestra_num;
+		$this->ruta 				= $cfg['base']['template'];
+		$this->template 			= new template();
 	}
 
 	/**
@@ -47,8 +47,8 @@ class select
 	private function select(){
 
 		$data = array('###NAME_ID###' => $this->selectId ,
-					  			'###ITEM###'    => $this->selectDescription,
-					  			'###OPTION###'  =>  $this::option() );
+					  '###ITEM###'    => $this->selectDescription,
+					  '###OPTION###'  =>  $this::option() );
 
 		return  $this->despliegueTemplate($data,$this->ruta."select.html");
 
@@ -89,10 +89,10 @@ class select
 			else
 				$num = $i.") ";
 
-			$data= array('###NUMBER###'							=>	$num,
-									 '###SELECTED###'						=>	$selected,
-									 '###OPTION_VALUE###'				=>	$this::codifica( $value[ $this->idMainField ] ,2 ),
-									 '###OPTION_DESCRIPTION###'	=>	$description  );
+			$data= array('###NUMBER###'				=>	$num,
+						 '###SELECTED###'			=>	$selected,
+						 '###OPTION_VALUE###'		=>	$this::codifica( $value[ $this->idMainField ] ,2 ),
+						 '###OPTION_DESCRIPTION###'	=>	$description  );
 
 			$code.= $this->despliegueTemplate($data,$this->ruta."option.html");
 

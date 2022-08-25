@@ -17,7 +17,8 @@ class response
 
 		switch ($this->id)
 		{
-			
+			case 'editaVehiculoData':
+			case 'editaVehiculo':
 			case 'eliminaVehiculo':
 			case 'ingresaVehiculoData':
 				return $this::obtenerContenidoClaseOption('vehiculos.class.php','Vehiculos');

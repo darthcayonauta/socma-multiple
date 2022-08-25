@@ -136,7 +136,9 @@ public function login($email = null, $clave = null)
 									 $id            = null )
 	{
 		if( $id ){
-			$update = "";
+			$update = "UPDATE vehiculo SET marca='{$marca}', modelo='{$modelo}', year='{$year}',patente='{$patente}',
+					  tipo_vehiculo='{$tipo_vehiculo}',transmision='{$transmision}' WHERE id={$id}";
+			
 			if( $this->sql->update( $update ) )
 					return true;
 			else 	return false;			
