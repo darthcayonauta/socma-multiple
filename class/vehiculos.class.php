@@ -185,7 +185,10 @@ class Vehiculos{
     *@return string
     */    
    private function crearSolicitud(){
-        return "<strong>{$this->id}</strong> esta en construccion!, aca va un formulario";
+            
+        require_once("solicitud-vehiculos.class.php");
+        $ob = new SolicitudVehiculos( $this->id );
+        return $ob->getCode();
    }
 
 

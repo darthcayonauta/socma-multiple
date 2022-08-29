@@ -2,11 +2,10 @@
 /**
 * @author Ing. Claudio Guzman Herrera
 * @version 1.0
-* @package salas
+* @package Automoviles
 */
 class select
 {
-
 	private $template;
 	private $arrayData;
 	private $idMainField;
@@ -23,7 +22,8 @@ class select
 							$selectId			= null,
 							$selectDescription 	= null,
 							$id_select 		 	= null,
-							$muestra_num 		= null )
+							$muestra_num 		= null,
+							$clase 				= null )
 	{
 		$oConf    = new config();
 		$cfg      = $oConf->getConfig();
@@ -35,6 +35,7 @@ class select
 		$this->selectDescription 	= $selectDescription;
 		$this->id_select 			= $id_select;
 		$this->muestra_num 			= $muestra_num;
+		$this->clase 				= $clase;		
 		$this->ruta 				= $cfg['base']['template'];
 		$this->template 			= new template();
 	}
@@ -45,9 +46,12 @@ class select
 	 * @return String
 	 */
 	private function select(){
+		
+		$clase = (!is_null( $this->clase )) ? $this->clase : $this->selectId; 
 
 		$data = array('###NAME_ID###' => $this->selectId ,
 					  '###ITEM###'    => $this->selectDescription,
+					  '###CLASE###'	  => $clase,	
 					  '###OPTION###'  =>  $this::option() );
 
 		return  $this->despliegueTemplate($data,$this->ruta."select.html");
@@ -62,15 +66,11 @@ class select
 	private function option()
 	{
 		$code="";
-
 		$i=1;
 
 		foreach ( $this->arrayData as $key => $value) {
 
-			if($this->id_select != $value[ $this->idMainField ] )
-				$selected = "";
-			else
-				$selected = "selected";
+			$selected = ( $this->id_select != $value[ $this->idMainField ] ) ? "" : "selected";
 
 			if(!is_array( $this->descriptionField ))
 				$description = $value[ $this->descriptionField ];
