@@ -191,7 +191,38 @@ public function login($email = null, $clave = null)
 		if( $this->sql->update( $update) )
 				return true;
 		else 	return false;
-
 	}
+
+	public function ingresaRecepcion( 	$id_vehiculo 	= null, 
+										$kilometraje	= null, 
+										$observacion 	= null,
+										$id_user 		= null,
+										$token 			= null ){
+		
+		$insert = "INSERT INTO recepcion(id_vehiculo,fecha,kilometraje,observacion,id_user,token) VALUES
+				({$id_vehiculo},'{$this->fecha_hoy}','{$kilometraje}','{$observacion}',{$id_user},'{$token}')";
+
+		if( $this->sql->insert( $insert) )
+				return true;
+		else 	return false;
+		
+		//return $insert;
+	}
+
+	public function ingresaCuerpoRecepcion($col_izq = null,$col_der=null,$id_item =null,$token )
+	{
+		$insert = "INSERT INTO cuerpo_repecion(col_izq,col_der,id_item,token) VALUES 
+				   ('{$col_izq}','{$col_der}',{$id_item},'{$token}')		
+		";
+
+		if( $this->sql->insert( $insert) )
+				return true;
+		else 	return false;
+	}
+
+	public function maxIdRecepcion(){
+		return $this->sql->select("SELECT max(id) AS maxId from recepcion");
+	}
+
 }//fin de clase
 ?>

@@ -8,6 +8,7 @@
         private $id;
         private $fecha_hoy;
         private $yo;
+        private $token;
 
         function __construct( $id = null ){
             
@@ -29,6 +30,8 @@
             $this->mes 			    =  date("m");
         
             $this->fecha_hora_hoy	=  date("Y-m-d H:i:s");
+            $this->token	        =  date("YmdHis");
+
         }
      
 
@@ -39,6 +42,10 @@
                     return $this::formulario();
                     break;
                 
+                 case 'ingresaRecepcion':
+                    return $this::ingresaRecepcion();
+                    break;
+
                 default:
                     # code...
                     return $this->error;
@@ -46,46 +53,105 @@
             }
         }
 
+        private function ingresaRecepcion()
+        {
+
+         if( $this->consultas->ingresaRecepcion(    $_POST['patente_vehiculo'],
+                                                    $_POST['kilometraje'],
+                                                    $_POST['ob_general'],
+                                                    $this->yo,
+                                                    $this->token  ) ){
+                $ingreso = true;
+            }else{
+                $ingreso = false;
+            } 
+
+            if($ingreso){
+
+                    if($this::ingresaCuerpoRecepcion())
+                         $ok = true;
+                    else $ok = false;    
+
+                    return "<strong>Todo Ok:</strong> Información ingresada Correctamente <br/>";
+            }else   return "<strong>Error:</strong> No se ha podido ingresar los datos!<br/>";
+
+        }
+
+        private function ingresaCuerpoRecepcion(){
+            
+            $separa_item    = $this::separa( $_POST['item'], '&' );
+            $separa_col_der = $this::separa( $_POST['col_der'], '&' );
+            $separa_col_izq = $this::separa( $_POST['col_izq'], '&' );
+
+            $k = 0;
+            for ($i=0; $i < count($separa_item); $i++) { 
+                
+                $aux_item       = $this::separa( $separa_item[$i],'=' );
+                $aux_col_izq    = $this::separa( $separa_col_izq[$i],'=' );
+                $aux_col_der    = $this::separa( $separa_col_der[$i],'=' );
+
+                //insert database
+                if( $this->consultas->ingresaCuerpoRecepcion(   $aux_col_izq[1],
+                                                                $aux_col_der[1], 
+                                                                $aux_item[1],
+                                                                $this->token ) ){
+                    $k++;
+                }
+            }
+           
+            if( $k > 0 )
+                return true;
+            else return false;             
+        }
+
         private function formulario(){
 
+            $maxId = "";
+
+            foreach ($this->consultas->maxIdRecepcion() as $key => $value) {
+                
+                $maxId = $value['maxId'];
+            }
+
             $arr_vehiculo = $this->consultas->vehiculo();
-            $sel_vehiculo = new Select($arr_vehiculo['process'],'patente','patente',
+            $sel_vehiculo = new Select($arr_vehiculo['process'],'id','patente',
                                      'patente_vehiculo','Seleccione Patente Vehículo',null,'x');
 
             $data = ['###fecha###'                  => $this::arreglaFechas( $this->fecha_hoy ),
                      '###select-patente###'         => $sel_vehiculo->getCode(),
-                     '###select-vigencia-rt###'     => $this::afirmaciones( 'id_vigencia_rt' ),
-                     '###select-vigencia-pc###'     => $this::afirmaciones( 'id_vigencia_pc' ),
-                     '###select-vigencia-so###'     => $this::afirmaciones( 'id_vigencia_so' ),
-                     '###select-ebem###'            => $this::afirmaciones( 'id_ebem' ),
-                     '###select-botiquin###'        => $this::afirmaciones( 'id_botiquin' ), 
-                     '###select-eov###'             => $this::afirmaciones( 'id_eov' ), 
-                     '###select-tl###'              => $this::afirmaciones( 'id_tl' ), 
-                     '###select-llr###'             => $this::afirmaciones( 'id_llr' ), 
-                     '###select-gata###'            => $this::afirmaciones( 'id_gata' ),
-                     '###select-li###'              => $this::afirmaciones( 'id_li' ),
-                     '###select-pu###'              => $this::afirmaciones( 'id_pu' ),
-                     '###select-chr###'             => $this::afirmaciones( 'id_chr' ),
-                     '###select-cpa###'             => $this::afirmaciones( 'id_cpa' ),
-                     '###select-rdr###'             => $this::afirmaciones( 'id_rdr' ), 
-                     '###select-cargador-usb###'    => $this::afirmaciones( 'id_cargador-usb' ),     
-                     '###select-lfa###'             => $this::afirmaciones( 'id_lfa' ),
-                     '###select-lfb###'             => $this::afirmaciones( 'id_lfb' ),
-                     '###select-lfb###'             => $this::afirmaciones( 'id_lfb' ),
-                     '###select-intermitentes###'   => $this::afirmaciones( 'id_intermitentes' ),
-                     '###select-luz-patente###'     => $this::afirmaciones( 'id_lp' ),     
-                     '###select-lf###'              => $this::afirmaciones( 'id_lf' ),
-                     '###select-lr###'              => $this::afirmaciones( 'id_lr' ),
-                     '###select-le###'              => $this::afirmaciones( 'id_le' ),
-                     '###select-lem###'             => $this::afirmaciones( 'id_lem' ),
-                     '###select-er###'              => $this::afirmaciones( 'id_er' ),
-                     '###select-el###'              => $this::afirmaciones( 'id_el' ),
-                     '###select-lpar###'            => $this::afirmaciones( 'id_lpar' ),
-                     '###select-par###'             => $this::afirmaciones( 'id_par' ),
-                     '###select-rep###'             => $this::afirmaciones( 'id_rep' ),
-                     '###select-ere###'             => $this::afirmaciones( 'id_ere' ),
-                     '###select-neumaticos###'      => $this::afirmaciones( 'id_neumaticos' ),
-                     '###select-vidrios###'         => $this::afirmaciones( 'id_vidrios' ),
+                     '###select-vigencia-rt###'     => $this::afirmaciones( 'col-izq' ),
+                     '###select-vigencia-pc###'     => $this::afirmaciones( 'col-izq' ),
+                     '###select-vigencia-so###'     => $this::afirmaciones( 'col-izq' ),
+                     '###select-ebem###'            => $this::afirmaciones( 'col-izq' ),
+                     '###select-botiquin###'        => $this::afirmaciones( 'col-izq' ), 
+                     '###select-eov###'             => $this::afirmaciones( 'col-izq' ), 
+                     '###select-tl###'              => $this::afirmaciones( 'col-izq' ), 
+                     '###select-llr###'             => $this::afirmaciones( 'col-izq' ), 
+                     '###select-gata###'            => $this::afirmaciones( 'col-izq' ),
+                     '###select-li###'              => $this::afirmaciones( 'col-izq' ),
+                     '###select-pu###'              => $this::afirmaciones( 'col-izq' ),
+                     '###select-chr###'             => $this::afirmaciones( 'col-izq' ),
+                     '###select-cpa###'             => $this::afirmaciones( 'col-izq' ),
+                     '###select-rdr###'             => $this::afirmaciones( 'col-izq' ), 
+                     '###select-cargador-usb###'    => $this::afirmaciones( 'col-izq' ),     
+                     '###select-lfa###'             => $this::afirmaciones( 'col-izq' ),
+                     '###select-lfb###'             => $this::afirmaciones( 'col-izq' ),
+                     '###select-lfb###'             => $this::afirmaciones( 'col-izq' ),
+                     '###select-intermitentes###'   => $this::afirmaciones( 'col-izq' ),
+                     '###select-luz-patente###'     => $this::afirmaciones( 'col-izq' ),     
+                     '###select-lf###'              => $this::afirmaciones( 'col-izq' ),
+                     '###select-lr###'              => $this::afirmaciones( 'col-izq' ),
+                     '###select-le###'              => $this::afirmaciones( 'col-izq' ),
+                     '###select-lem###'             => $this::afirmaciones( 'col-izq' ),
+                     '###select-er###'              => $this::afirmaciones( 'col-izq' ),
+                     '###select-el###'              => $this::afirmaciones( 'col-izq' ),
+                     '###select-lpar###'            => $this::afirmaciones( 'col-izq' ),
+                     '###select-par###'             => $this::afirmaciones( 'col-izq' ),
+                     '###select-rep###'             => $this::afirmaciones( 'col-izq' ),
+                     '###select-ere###'             => $this::afirmaciones( 'col-izq' ),
+                     '###select-neumaticos###'      => $this::afirmaciones( 'col-izq' ),
+                     '###select-vidrios###'         => $this::afirmaciones( 'col-izq' ),
+                     '###num-recepcion###'          => $maxId +1
         
         ];
             return $this::despliegueTemplate( $data , 'solicitudes/formulario.html' );

@@ -17,6 +17,7 @@ class response
 
 		switch ($this->id)
 		{
+			case 'ingresaRecepcion':
 			case 'despliegaFormSolicitud':
 				# code...
 				return $this::obtenerContenidoClaseOption('solicitud-vehiculos.class.php','SolicitudVehiculos');
