@@ -9,11 +9,15 @@
         private $fecha_hoy;
         private $yo;
         private $token;
+        private $tipo_usuario;
+
 
         function __construct( $id = null ){
             
             $this->id               = $id;
             $this->yo               = $_SESSION['yo'];
+            $this->tipo_usuario     = $_SESSION['tipo_usuario'];
+
             $oConf                  = new config();
             $cfg                    = $oConf->getConfig();
             $db                     = new mysqldb(  $cfg['base']['dbhost'],
@@ -46,12 +50,157 @@
                     return $this::ingresaRecepcion();
                     break;
 
+                 case 'listarSolicitudes':
+                    return $this::listarSolicitudes();        
+
+                  break;  
+
+                 case 'tablaRecepcion':
+                    return $this::tablaRecepcion();
+                    break;                    
+                  
                 default:
                     # code...
                     return $this->error;
                     break;
             }
         }
+
+         /** 
+     * listarSolicitud(): listado de solicitudes de vehiculos
+     * @return string
+     */
+    private function listarSolicitudes(){
+      
+        //return "<strong>{$this->id}</strong> esta en construccion!, aun no";
+
+        $data = ['###listado-recepciones###' => $this::tablaRecepcion() ];
+        return $this::despliegueTemplate($data, "solicitudes/recepciones.html");
+       } 
+
+       private function tablaRecepcion()
+       {
+
+        $arr = $this::trRecepcion();
+
+        $data = ['###tr###'         => $arr['code'], 
+                 '###total-recs###' => $arr['total-recs'],
+                 '###nav-links###'  => $arr['nav-links']   
+                ];
+        return $this::despliegueTemplate($data, "solicitudes/tabla-recepciones.html");
+       }
+
+       //listaRecepciones
+       private function trRecepcion(){
+        $code = "";
+
+        $arr = ( $this->tipo_usuario==1 ) ? $this->consultas->listaRecepciones() : $this->consultas->listaRecepciones($this->yo);
+                
+        $utils      = new utiles($arr['sql']);
+        $rs_dd      = $utils->show();
+        $nav_links  = $rs_dd['nav_links'];
+        $param      = $rs_dd['result'] ;
+        
+        foreach ($param as $key => $value) {
+            # code...
+
+            $data = ['###id###'          => $value['id'],
+                     '###fecha###'       => $this::arreglaFechas( $value['fecha'] ),
+                     '###kilometraje###' => $this::separa_miles( $value['kilometraje'] ),
+                     '###patente###'     => $value['patente'] , 
+                     '###usuario###'     => strtoupper( $value['nombres']." ".$value['apaterno'] ),
+                     '###modal###'       => $this::modal( 'detalle-recepcion-'.$value['id'],
+                                                          '<i class="far fa-plus-square"></i>', 
+                                                          'Detalle de Recepción de Vehículo', 
+                                                          $this::detalleRecepcion( $value['id'],
+                                                                                   $value['token'],
+                                                                                   $value['fecha'],
+                                                                                   $value['patente'],
+                                                                                   $value['kilometraje'],
+                                                                                   $value['observacion'] ) )      
+        
+        ];
+            $code .= $this::despliegueTemplate( $data, 'solicitudes/tr-recepciones.html' );
+        }
+
+        $out['code'] = $code;
+        $out['total-recs'] = $arr['total-recs'];
+        $out['nav-links']  = $nav_links;
+
+        return $out;
+       }
+
+       private function detalleRecepcion( $id = null,
+                                         $token=null, 
+                                         $fecha = null,
+                                         $patente = null,
+                                         $kilometraje = null,
+                                         $observacion = null ){
+
+            $data = [ '###fecha###'         => $this::arreglaFechas($fecha),
+                      '###id###'            => $id,
+                      '###patente###'       => $patente,
+                      '###kilometraje###'   => $this::separa_miles( $kilometraje ),
+                      '###observacion###'   => $observacion ,
+                      '###detalle###'       => $this::cuerpoRecepcion($token )                          
+                    ];
+
+
+            return $this::despliegueTemplate( $data, 'solicitudes/detalle-formulario.html' );
+       }
+
+       private function CuerpoRecepcion($token = null ){
+
+            $data = ['###tr###' => $this::trCuerpoRecepcion($token) ];
+            return $this::despliegueTemplate($data, 'solicitudes/tabla-detalle.html'  );
+       }
+
+
+       private function trCuerpoRecepcion($token = null ){
+        
+        $arr = $this->consultas->detalleRecepcion( $token );
+        
+        $code = "";
+
+        $num =0;
+        foreach ($arr['process'] as $key => $value) {
+            # code...
+
+            switch ($value['col_izq']) {
+                case '1':
+                    # code...
+                    $col_izq = "SI";
+                    break;
+                
+                case '2':
+                        # code...
+                    $col_izq = "NO";
+                    break;
+
+                default:
+                    # code...
+                    $col_izq = strtoupper( $value['col_izq'] );
+                    break;
+            }
+
+            $col_izq = ($col_izq=='') ? 'NO CONTESTADO': $col_izq;
+            $col_der = ( $value['col_der'] =='') ? 'NO CONTESTADO': $value['col_der'];
+
+
+            $data = [ '###item###'      => $value['nombreItem'],
+                      '###col-izq###'   => $col_izq,
+                      '###col-der###'   => $col_der,
+                      '###num###'       => $num+1
+                      ];
+            $code .= $this::despliegueTemplate( $data, 'solicitudes/detalle-items.html' );
+
+            $num++;
+        }
+
+        return $code;
+       }
+
+
 
         private function ingresaRecepcion()
         {

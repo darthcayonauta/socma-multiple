@@ -17,6 +17,7 @@ class response
 
 		switch ($this->id)
 		{
+			case 'tablaRecepcion':
 			case 'ingresaRecepcion':
 			case 'despliegaFormSolicitud':
 				# code...

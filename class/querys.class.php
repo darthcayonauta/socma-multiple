@@ -224,5 +224,57 @@ public function login($email = null, $clave = null)
 		return $this->sql->select("SELECT max(id) AS maxId from recepcion");
 	}
 
+	public function listaRecepciones( $id_user = null)
+	{
+		$resto = null;
+		if($id_user)
+			$resto = " WHERE recepcion.id_user={$id_user}";
+			
+		$ssql = "SELECT 
+					recepcion.id,
+					recepcion.fecha,
+					recepcion.id_vehiculo,
+					recepcion.kilometraje,
+					recepcion.token,
+					vehiculo.patente,
+					recepcion.observacion, 
+					usuario.nombres,
+					usuario.apaterno
+				FROM recepcion 
+				INNER JOIN vehiculo ON (vehiculo.id = recepcion.id_vehiculo)
+				INNER JOIN usuario ON (usuario.id = recepcion.id_user)
+				{$resto}
+				
+				";
+
+		$arr['sql'] 	= $ssql;
+		$arr['process'] = $this->sql->select( $ssql );
+		$arr['total-recs'] = count( $arr['process'] );
+
+		return $arr;
+	}
+
+	public function detalleRecepcion( $token = null ){
+		
+		$ssql = "SELECT 
+			   		cuerpo_repecion.id_item,
+				   	cuerpo_repecion.col_izq,
+				   	cuerpo_repecion.col_der,
+					item.descripcion AS nombreItem
+			    FROM  
+				cuerpo_repecion
+				INNER JOIN item ON (item.id = cuerpo_repecion.id_item)
+				WHERE cuerpo_repecion.token = '{$token}'
+		";	
+		
+		$arr['sql'] 	= $ssql;
+		$arr['process'] = $this->sql->select( $ssql );
+		$arr['total-recs'] = count( $arr['process'] );
+
+		return $arr;
+	}
+
+
+
 }//fin de clase
 ?>

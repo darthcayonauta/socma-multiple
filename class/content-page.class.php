@@ -104,12 +104,15 @@ class ContentPage
       switch ($this->id) {
 			
 			case 'listarVehiculos':
-			case 'crearVehiculo':
-			case 'listarSolicitudes':
+			case 'crearVehiculo':			
             case 'crearSolicitud':
 			case 'inicio':			
 				return $this::generalCall( 'vehiculos.class.php', 'Vehiculos', $this->id );
 			break;
+
+			case 'listarSolicitudes':
+				return $this::generalCall( 'solicitud-vehiculos.class.php', 'SolicitudVehiculos', $this->id );
+			break;	
 
       default:
         # code...

@@ -176,7 +176,10 @@ class Vehiculos{
      */
     private function listarSolicitud(){
       
-        return "<strong>{$this->id}</strong> esta en construccion!, aun no";
+        
+        require_once ("solicitud-vehiculos.class.php");
+        $ob = new SolicitudVehiculos('listarSolicitudes');
+        return $ob->getCode();
 
        } 
 

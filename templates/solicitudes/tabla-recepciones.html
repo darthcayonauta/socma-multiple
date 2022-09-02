@@ -1,0 +1,42 @@
+<div class="table-responsive">
+    <p>
+        <strong>Nota :</strong> Hay un total de <strong>###total-recs###</strong> recepcion(es) en el sistema
+    </p>
+    <table class="table table-dark">
+        <thead>
+            <tr>
+                <th># Recepción</th>
+                <th>Fecha</th>
+                <th>Patente Vehiculo</th>
+                <th>Kilometraje</th>
+                <th>Responsable</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            ###tr###
+        </tbody>
+    </table>
+    
+          <nav aria-label="Page navigation example">
+            <ul class="pagination">
+              ###nav-links###
+            </ul>
+          </nav>  
+    </div>
+</div>
+<script>
+    $('.pagination').click( function(){
+
+    var valores = $(this).attr('data');
+    var page     = valores.split("=");
+
+    var data = {
+        'accion':'send',
+        'id':'tablaRecepcion',
+        'page':page[1] };
+
+    ajx('#listado-recepciones',data);
+
+    });
+</script>
