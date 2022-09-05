@@ -42,7 +42,11 @@ class ContentPage
 	private function control()
 	{
 		switch ($this->id)
-		{			
+		{	
+			case 'cambia-password':	
+			case 'accesos':	
+			case 'crear-usuario':
+			case 'listar-usuarios':
 			case 'listarVehiculos':
 			case 'crearVehiculo':
 			case 'listarSolicitudes':
@@ -103,6 +107,11 @@ class ContentPage
     {
       switch ($this->id) {
 			
+			case 'accesos':
+				# code...
+				return $this::generalCall( 'accesos.class.php', 'Accesos', $this->id );
+				break;
+			
 			case 'listarVehiculos':
 			case 'crearVehiculo':			
             case 'crearSolicitud':
@@ -113,6 +122,13 @@ class ContentPage
 			case 'listarSolicitudes':
 				return $this::generalCall( 'solicitud-vehiculos.class.php', 'SolicitudVehiculos', $this->id );
 			break;	
+
+			case 'cambia-password':
+			case 'crear-usuario':
+			case 'listar-usuarios':
+				return $this::generalCall( 'usuarios.class.php', 'usuarios', $this->id );
+			break;	
+
 
       default:
         # code...

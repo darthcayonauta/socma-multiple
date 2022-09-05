@@ -13,7 +13,7 @@ class paginas
 	private $con;
 	public  $sql;
 	public $get_var = "page";
-	public $rows_on_page = "3";
+	public $rows_on_page = "10";
 	public $str_forward = "SIGUIENTE";
 	public $str_backward = "ANTERIOR";
 	public $all_rows;

@@ -274,7 +274,111 @@ public function login($email = null, $clave = null)
 		return $arr;
 	}
 
+	public function usersListado( $id  = null , $rut = null, $no_todos = null )
+	{
+		$resto = null;
+
+		if( $id )
+			$resto = " AND id = {$id}";
+
+		if( $rut )
+			$resto = " AND rut = '{$rut}'";	
+
+		if( $no_todos )
+			$resto = " AND id_estado = 1";	
+
+		$ssql = "SELECT * FROM usuario WHERE tipo_usuario = 4 {$resto} ORDER BY apaterno";
+	
+		$arr['sql']= $ssql;
+		$arr['process']= $this->sql->select( $ssql );
+		$arr['total-recs']= count( $arr['process'] );
+	
+		return $arr;
+
+	}	
 
 
+	public function ingresaNewUsuario( $nombres  = null, 
+									   $apaterno = null,
+									   $amaterno = null,
+									   $rut 	 = null,
+									   $clave    = null,
+									   $email 	 = null
+
+	)
+	{
+	$arr = $this::usersListado( null, $rut );	
+
+	$insert = "INSERT INTO usuario(nombres,apaterno,amaterno,rut,email,clave,tipo_usuario,id_estado) VALUES 
+	('{$nombres}','{$apaterno}','{$amaterno}','{$rut}','{$email}',PASSWORD('{$clave}'),4,1)	
+	";
+
+	if( $arr['total-recs'] > 0 )
+		return false;
+	else{
+			if( $this->sql->insert( $insert ) )
+					return true;
+			else 	return false;
+		}
+	}
+
+	public function eliminaUsuario( $id_user = null )
+	{
+		$update = "UPDATE usuario SET id_estado=2 WHERE id={$id_user}";
+
+		if( $this->sql->update( $update ) )
+				return true;
+		else 	return false;
+	}
+
+	public function actualizaUsuario( 	$nombres = null,
+										$apaterno = null,
+										$amaterno = null,
+										$id_user  = null,
+										$rut 	  = null	   )
+	{
+		$update = "UPDATE usuario SET nombres = '{$nombres}', 
+									  apaterno='{$apaterno}',
+									  amaterno='{$amaterno}',
+									  rut     ='{$rut}'
+		     	   WHERE id={$id_user}";
+
+		if( $this->sql->update( $update ) )
+				return true;
+		else 	return false;
+	}
+
+	public function listaAccesos()
+	{
+		$ssql = "SELECT 
+					accesos.id,
+					accesos.fecha,
+					accesos.ip,
+					accesos.sesion,
+					accesos.id_usuario,
+					usuario.apaterno,
+					usuario.amaterno,
+					usuario.nombres
+				FROM 
+				accesos
+				INNER JOIN usuario ON (accesos.id_usuario = usuario.id)
+				ORDER BY accesos.fecha DESC
+				";
+
+		$arr['sql'] 	= $ssql;
+		$arr['process'] = $this->sql->select( $ssql );
+		$arr['total-recs'] = count( $arr['process'] );
+
+		return $arr;
+	}
+
+	public function cambiaPassword(  $clave = null, $id_usuario = null )
+	{
+		$update = "UPDATE usuario SET clave = PASSWORD('{$clave}') WHERE id={$id_usuario}";
+	
+		if( $this->sql->update( $update ) )
+				return true;
+		else 	return false;
+	}
 }//fin de clase
 ?>

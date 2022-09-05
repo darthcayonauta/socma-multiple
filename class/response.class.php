@@ -17,6 +17,16 @@ class response
 
 		switch ($this->id)
 		{
+			case 'cambiaClaveData':
+			case 'actualizaUsuario':
+			case 'editarUsuario':
+			case 'eliminaUsuario':
+			case 'ingresaNewUsuario':
+				# code...
+				return $this::obtenerContenidoClaseOption('usuarios.class.php','Usuarios');
+				break;
+
+
 			case 'tablaRecepcion':
 			case 'ingresaRecepcion':
 			case 'despliegaFormSolicitud':
